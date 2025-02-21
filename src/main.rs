@@ -36,7 +36,7 @@ async fn main() {
                     MemoryStatsStats::V1(_) => {}
                     MemoryStatsStats::V2(result) => {
                         let shm_usage = result.shmem / (1024 ^ 2);
-                        info!{"shm_usage:{} MB", shm_usage};
+                        info!("shm_usage:{} MB", shm_usage);
                         let shm_usage_percent = shm_usage as f32 / shm_size_total as f32;
                         info!("shm_usage_percent: {}%\n", shm_usage_percent*100.0);
                         if shm_usage_percent > 0.9 {
