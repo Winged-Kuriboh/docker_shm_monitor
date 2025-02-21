@@ -39,7 +39,7 @@ async fn main() {
                         info!("shm_usage:{} MB", shm_usage);
                         let shm_usage_percent = shm_usage as f32 / shm_size_total as f32;
                         info!("shm_usage_percent: {}%\n", shm_usage_percent*100.0);
-                        if shm_usage_percent > 0.9 {
+                        if shm_usage_percent >=0.9 {
                             warn!("shm_usage_percent:{}%", shm_usage_percent*100.0);
                             let _ = send_email();
                             break
