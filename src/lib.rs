@@ -37,31 +37,31 @@ impl EmailInfo {
         let file = File::open(path)?;
         let reader = io::BufReader::new(file);
 
-        let mut emailinfo = EmailInfo::new();
+        let mut email_info = EmailInfo::new();
 
         for line in reader.lines() {
             let line = line?; // Read line and handle error
             if let Some((key, value)) = parse_line(&line) {
                 match key {
-                    "from_email" => emailinfo.from_email = value,
-                    "to_email" => emailinfo.to_email = value,
-                    "smtp_server" => emailinfo.smtp_server = value,
+                    "from_email" => email_info.from_email = value,
+                    "to_email" => email_info.to_email = value,
+                    "smtp_server" => email_info.smtp_server = value,
                     "smtp_port" => {
-                        emailinfo.smtp_port = value.parse().unwrap_or_else(|err| {
+                        email_info.smtp_port = value.parse().unwrap_or_else(|err| {
                             println!("端口号错误：{}", err);
                             process::exit(1)
                         })
                     }
-                    "smtp_user" => emailinfo.smtp_user = value,
-                    "smtp_password" => emailinfo.smtp_password = value,
-                    "subject" => emailinfo.subject = value,
-                    "body" => emailinfo.body = value,
+                    "smtp_user" => email_info.smtp_user = value,
+                    "smtp_password" => email_info.smtp_password = value,
+                    "subject" => email_info.subject = value,
+                    "body" => email_info.body = value,
                     _ => (),
                 }
             }
         }
 
-        Ok(emailinfo)
+        Ok(email_info)
     }
 }
 
