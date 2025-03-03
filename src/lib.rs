@@ -5,6 +5,7 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 use std::process;
+use log::{error, info};
 
 #[derive(Debug)]
 pub struct EmailInfo {
@@ -48,7 +49,7 @@ impl EmailInfo {
                     "smtp_server" => email_info.smtp_server = value,
                     "smtp_port" => {
                         email_info.smtp_port = value.parse().unwrap_or_else(|err| {
-                            println!("端口号错误：{}", err);
+                            error!("端口号错误：{}", err);
                             process::exit(1)
                         })
                     }
@@ -93,8 +94,8 @@ pub fn send_email() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     match mailer.send(&email) {
-        Ok(_) => println!("邮件发送成功！"),
-        Err(e) => eprintln!("邮件发送失败: {:?}", e),
+        Ok(_) => info!("邮件发送成功！"),
+        Err(e) => info!("邮件发送失败: {:?}", e),
     }
     Ok(())
 }

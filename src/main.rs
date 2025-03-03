@@ -2,7 +2,7 @@ use bollard::container::{InspectContainerOptions, MemoryStatsStats, StatsOptions
 use bollard::Docker;
 use docker_monitor::send_email;
 use futures::StreamExt;
-use log::{info, warn};
+use log::{error, info, warn};
 use log4rs;
 use std::process;
 use tokio;
@@ -12,7 +12,7 @@ async fn main() {
     log4rs::init_file("log4rs.yaml", Default::default()).unwrap();
     let container_name = "mysql";
     let docker = Docker::connect_with_local_defaults().unwrap_or_else(|error| {
-        println!("Failed to connect to docker: {}", error);
+        error!("Failed to connect to docker: {}", error);
         process::exit(1)
     });
 
@@ -20,7 +20,7 @@ async fn main() {
         .inspect_container(container_name, None::<InspectContainerOptions>)
         .await
         .unwrap_or_else(|error| {
-            println!("Failed to inspect container {}: {}", container_name, error);
+            error!("Failed to inspect container {}: {}", container_name, error);
             process::exit(1)
         });
     let shm_size_total = inspect.host_config.unwrap().shm_size.unwrap() / (1024 ^ 2); //单位 MB
@@ -46,7 +46,7 @@ async fn main() {
                 }
             },
             Err(e) => {
-                eprintln!("Error fetching stats: {:?}", e);
+                error!("Error fetching stats: {:?}", e);
             }
         }
     }
